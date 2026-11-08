@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Image Restoration</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+  h1 { margin-bottom: .2rem; }
+  .row { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0; align-items: end; }
+  label { display: block; font-size: .85rem; margin-bottom: .2rem; }
+  button { padding: .5rem 1.2rem; background: #1f3864; color: #fff; border: 0; border-radius: 4px; cursor: pointer; }
+  .pair { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .pair figure { margin: 0; flex: 1 1 300px; }
+  img { max-width: 100%; border: 1px solid #ccc; }
+  #msg { color: #a00; min-height: 1.2rem; }
+  .tag { font-size: .8rem; color: #555; }
+</style>
+</head>
+<body>
+<h1>Image Restoration</h1>
+<p class="tag">AAI-521 final project. Denoise, upscale, colorize, or inpaint an image.</p>
+<form id="f">
+  <div class="row">
+    <div><label for="task">Task</label>
+      <select id="task" name="task">
+        {% for t, m in tasks.items() %}
+        <option value="{{ t }}" {% if not m %}disabled{% endif %}>{{ t.replace('_', ' ') }}{% if not m %} (not integrated yet){% endif %}</option>
+        {% endfor %}
+      </select></div>
+    <div><label for="image">Image</label><input id="image" name="image" type="file" accept="image/*" required></div>
+    <div id="maskbox" style="display:none"><label for="mask">Mask (white = missing)</label><input id="mask" name="mask" type="file" accept="image/*"></div>
+    <div id="sigmabox"><label for="sigma">Noise level (0-100)</label><input id="sigma" name="sigma" type="number" value="25" min="1" max="100"></div>
+    <div id="factorbox" style="display:none"><label for="factor">Scale factor</label><select id="factor" name="factor"><option>2</option><option>3</option><option>4</option></select></div>
+    <button type="submit">Enhance</button>
+  </div>
+</form>
+<div id="msg"></div>
+<div class="pair">
+  <figure><figcaption>Before</figcaption><img id="before" alt=""></figure>
+  <figure><figcaption>After <span class="tag" id="model"></span></figcaption><img id="after" alt=""></figure>
+</div>
+<a id="dl" download="restored.png" style="display:none">Download result</a>
+<script>
+const f = document.getElementById('f'), msg = document.getElementById('msg');
+const task = document.getElementById('task');
+function toggle() {
+  document.getElementById('maskbox').style.display = task.value === 'inpainting' ? '' : 'none';
+  document.getElementById('sigmabox').style.display = task.value === 'denoise' ? '' : 'none';
+  document.getElementById('factorbox').style.display = task.value === 'super_resolution' ? '' : 'none';
+}
+task.addEventListener('change', toggle); toggle();
+document.getElementById('image').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (file) document.getElementById('before').src = URL.createObjectURL(file);
+});
+f.addEventListener('submit', async e => {
+  e.preventDefault(); msg.textContent = 'Working...';
+  const fd = new FormData(f);
+  if (task.value !== 'inpainting') fd.delete('mask');
+  const r = await fetch('/api/enhance', { method: 'POST', body: fd });
+  if (!r.ok) { const j = await r.json().catch(() => ({})); msg.textContent = j.error || 'Request failed'; return; }
+  const blob = await r.blob(); const url = URL.createObjectURL(blob);
+  document.getElementById('after').src = url;
+  document.getElementById('model').textContent = '(' + (r.headers.get('X-Model') || '') + ')';
+  const dl = document.getElementById('dl'); dl.href = url; dl.style.display = ''; msg.textContent = '';
+});
+</script>
+</body>
+</html>

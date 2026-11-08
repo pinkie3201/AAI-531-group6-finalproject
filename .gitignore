@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+data/bsds500/
+data/_src/
+checkpoints/
+*.pt
+*.pth
+*.safetensors
+.env

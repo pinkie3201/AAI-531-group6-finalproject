@@ -1,0 +1,16 @@
+split,sigma,method,psnr_db,ssim,n_images
+test,15,noisy,24.83,0.5831,200
+test,15,gaussian,28.06,0.7909,200
+test,15,median,26.96,0.7246,200
+test,15,bilateral,28.08,0.7281,200
+test,15,nlm,27.69,0.7567,200
+test,25,noisy,20.54,0.4083,200
+test,25,gaussian,26.01,0.6949,200
+test,25,median,24.96,0.595,200
+test,25,bilateral,21.7,0.4544,200
+test,25,nlm,25.01,0.6644,200
+test,50,noisy,15.01,0.2124,200
+test,50,gaussian,23.24,0.5605,200
+test,50,median,20.98,0.3815,200
+test,50,bilateral,15.17,0.2166,200
+test,50,nlm,21.77,0.5385,200

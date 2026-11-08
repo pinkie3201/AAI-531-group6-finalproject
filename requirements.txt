@@ -1,0 +1,12 @@
+numpy
+pillow
+scipy
+scikit-image
+opencv-python-headless
+matplotlib
+pandas
+torch
+torchvision
+diffusers
+flask
+pytest

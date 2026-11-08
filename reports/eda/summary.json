@@ -1,0 +1,26 @@
+{
+  "images_per_split": {
+    "test": 200,
+    "train": 200,
+    "val": 100
+  },
+  "sizes": {
+    "321x481": 348,
+    "481x321": 152
+  },
+  "orientation": {
+    "landscape": 348,
+    "portrait": 152
+  },
+  "total_file_mb": 35.3,
+  "file_kb_mean": 72.2,
+  "mean_brightness": 0.412,
+  "std_brightness_across_images": 0.108,
+  "mean_saturation": 0.369,
+  "near_grayscale_images": 0,
+  "sharpness_min": 0.00103,
+  "sharpness_median": 0.02155,
+  "sharpness_max": 0.16161,
+  "dark_images_mean_lt_0.2": 8,
+  "bright_images_mean_gt_0.8": 1
+}
