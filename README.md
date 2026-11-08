@@ -101,10 +101,6 @@ Telea). Colorization has no stand-in and returns a 501 error.
   colorization, and inpainting models.
 - Baseline results are in `reports/denoise_results.csv`.
 
-## AI tool disclosure
-
-Claude (Anthropic) helped write the code in the `csadiq` branch. This is
-disclosed per the course AI-use policy.
 
 ## Branches
 
